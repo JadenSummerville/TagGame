@@ -1,0 +1,77 @@
+package src.Abilities;
+
+import java.util.ArrayList;
+import java.util.Set;
+import src.Particle;
+import src.Player;
+
+public class Swap implements Ability
+{
+    public Player player;
+    private double cooldown;
+    private double activationTimer;
+    private Set<Particle> sleepingParticles;
+    private Set<Particle> activeParticles;
+    private Set<Player> players;
+    private final static int NUM_OF_PARTILES = 10;
+
+    private boolean boosted = false;
+
+    public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles, Set<Player> players)
+    {
+        this.player = player;
+        this.activeParticles = activeParticles;
+        this.sleepingParticles = sleepingParticles;
+        this.players = players;
+    }
+    public void activate()
+    {
+        if(cooldown == 0)
+        {
+            Player closestPlayer = null;
+            double closest = Double.MAX_VALUE;
+            for(Player currentPlayer: players)
+            {
+                if(currentPlayer.equals(player))
+                {
+                    continue;
+                }
+                double distance = Math.pow(Math.pow(currentPlayer.getX()-player.getX(), 2)+Math.pow(currentPlayer.getY()-player.getY(), 2), 0.5);
+                if (distance < closest)
+                {
+                    closest = distance;
+                    closestPlayer = currentPlayer;
+                }
+            }
+            double o = closestPlayer.getX();
+            closestPlayer.setX(player.getX());
+            player.setX(o);
+
+            o = closestPlayer.getY();
+            closestPlayer.setY(player.getY());
+            player.setY(o);
+
+            for(int i = 0; i != NUM_OF_PARTILES; i++)
+            {
+                if (sleepingParticles.size() != 0)
+                {
+                    Particle nextParticle = new ArrayList<>(sleepingParticles).get(0);
+                    nextParticle.spawn((int) player.getX(), (int) player.getY());
+                }
+                if (sleepingParticles.size() != 0)
+                {
+                    Particle nextParticle = new ArrayList<>(sleepingParticles).get(0);
+                    nextParticle.spawn((int) closestPlayer.getX(), (int) closestPlayer.getY());
+                }
+            }
+            cooldown = 100;
+        }
+    }
+    public void idol()
+    {
+        if(cooldown != 0)
+        {
+            cooldown--;
+        }
+    }
+}
