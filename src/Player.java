@@ -6,11 +6,16 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.JLabel;
 import src.Abilities.Ability;
+import src.Abilities.BoneToss;
 import src.Abilities.SpeedBoost;
 import src.Abilities.Swap;
+import src.Abilities.WesternDraw;
+import src.affects.Affect;
 import src.builders.CollisionDetector;
 import src.builders.Display;
 import src.builders.Ticker;
+import src.obsticles.CollisionDetectorObsticle;
+import src.obsticles.obsticle;
 
 public class Player extends Ticker.Entity
 {
@@ -25,6 +30,7 @@ public class Player extends Ticker.Entity
     private static Display display;
 
     private final Map<Integer, Ability> abilities = new HashMap<>();
+    private final Set<Affect> affects = new HashSet<>();
 
     private double x;
     private double y;
@@ -41,11 +47,12 @@ public class Player extends Ticker.Entity
     private final JLabel untaggedImage;
     private static JLabel taggedImage;
 
-    private static final int TAG_RADIUS = 80;
+    public static final int TAG_RADIUS = 80;
 
     private static CollisionDetector<Player> collisionDetectorPlayers;
+    private static CollisionDetector<obsticle> collisionDetectorObsticles;
 
-    private double timeAsIt = -0.1;
+    private double timeAsIt = 0;
     private double tagInvinsibility = 4;
     private int reasonsToBeInvisible = 0;
 
@@ -72,11 +79,12 @@ public class Player extends Ticker.Entity
         display.setZOrder(untaggedImage, 0);
     }
 
-    public static void setDisplay(Display display, JLabel taggedImage, CollisionDetector<Player> collisionDetectorPlayers)
+    public static void setDisplay(Display display, JLabel taggedImage, CollisionDetector<Player> collisionDetectorPlayers, CollisionDetector<obsticle> collisionDetectorObsticles)
     {
         Player.display = display;
         Player.taggedImage = taggedImage;
         Player.collisionDetectorPlayers = collisionDetectorPlayers;
+        Player.collisionDetectorObsticles = collisionDetectorObsticles;
 
         display.setZOrder(taggedImage, 0);
     }
@@ -86,6 +94,7 @@ public class Player extends Ticker.Entity
         speed = SPEED;
         friction = FRICTION;
 
+        // Update abilities
         for(Integer ability: abilities.keySet())
         {
             if (display.keyBoard.isPressed(ability))
@@ -93,6 +102,22 @@ public class Player extends Ticker.Entity
                 abilities.get(ability).activate();
             }
             abilities.get(ability).idol();
+        }
+
+        // Update affects
+        Set<Affect> toBeDeleted = new HashSet<>();
+        for(Affect affect: affects)
+        {
+            affect.update();
+            if(affect.isDepleted())
+            {
+                affect.delete();
+                toBeDeleted.add(affect);
+            }
+        }
+        for(Affect delete: toBeDeleted)
+        {
+            affects.remove(delete);
         }
         // initiate adjusted speed and friction
         double adjustedSpeed = speed * (1 + timeAsIt) * (tagInvinsibility > 0 && !tagged ? 2 : 1);
@@ -116,6 +141,32 @@ public class Player extends Ticker.Entity
         x += xV*adjustedSpeed;
         y += yV*adjustedSpeed;
 
+        CollisionDetectorObsticle collisionDetectorObsticle = new CollisionDetectorObsticle();
+        collisionDetectorObsticles.add(collisionDetectorObsticle, (int)x, (int)y);
+        Set<obsticle> collidedObsticles = collisionDetectorObsticles.findCollisions(collisionDetectorObsticle, 140);
+        collisionDetectorObsticles.remove(collisionDetectorObsticle);
+        for(obsticle colision: collidedObsticles)
+        {
+            colision.collide(this);
+        }
+
+        if(x < -10)
+        {
+            x = -10;
+        }
+        if(y < -10)
+        {
+            y = -10;
+        }
+        if(x > 1610)
+        {
+            x = 1610;
+        }
+        if(y > 975)
+        {
+            y = 975;
+        }
+
         collisionDetectorPlayers.move(this, (int)x, (int)y);
         Set<Player> collidedPlayers = collisionDetectorPlayers.findCollisions(this, TAG_RADIUS);
 
@@ -125,7 +176,7 @@ public class Player extends Ticker.Entity
         if(tagged)
         {
             taggedImage.setLocation((int)x, (int)y);
-            timeAsIt += 0.00002;
+            timeAsIt += 0.00004;
             for(Player tagged: collidedPlayers)
             {
                 if (tagged.canBeTaggged())
@@ -220,17 +271,31 @@ public class Player extends Ticker.Entity
         switch(abilityId)
         {
             case 0:
-            case 2:
                 ability = new SpeedBoost();
                 break;
             case 1:
                 ability = new Swap();
                 break;
+            case 2:
+                ability = new BoneToss();
+                break;
+            case 3:
+                ability = new WesternDraw();
+                break;
             default:
                 throw new RuntimeException("Unidentified ability");
         }
-        ability.inform(this, sleepingParticles, activeParticles, allPlayers);
+        ability.inform(this, sleepingParticles, activeParticles, allPlayers, collisionDetectorObsticles, display);
         abilities.put(button, ability);
+    }
+    public void addAffect(Affect affect)
+    {
+        if(affects.contains(affect))
+        {
+            return;
+        }
+        affect.create();
+        affects.add(affect);
     }
     @Override
     public boolean equals(Object obj)
