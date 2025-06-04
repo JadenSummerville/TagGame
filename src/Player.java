@@ -122,6 +122,8 @@ public class Player extends Ticker.Entity
         // initiate adjusted speed and friction
         double adjustedSpeed = speed * (1 + timeAsIt) * (tagInvinsibility > 0 && !tagged ? 2 : 1);
 
+        // TODO: add ability adjust to speed and friction
+        // initiate adjusted speed and friction
         double yM = display.keyBoard.isPressed(up) ? -1.0 : 0.0;
         yM += (display.keyBoard.isPressed(down) ? 1.0 : 0.0);
         double xM = display.keyBoard.isPressed(right) ? 1 : 0;
