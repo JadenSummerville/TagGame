@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class Display {
+    private final java.util.Map<JLabel, JComponent> labelWrappers = new java.util.HashMap<>();
+
     private final JFrame frame;
     public final KeyBoard keyBoard;
     private final JPanel contentPane;
@@ -93,4 +95,80 @@ public class Display {
         contentPane.setComponentZOrder(jlabel, index);
         contentPane.repaint();
     }
+
+
+
+
+    public JLabel rotateLabel(JLabel originalLabel, double xA, double yA, int x, int y)
+    {
+        return rotateLabel(originalLabel, getVectorAngle(xA, yA), x, y);
+    }
+    public JLabel rotateLabel(JLabel label, double angle, int x, int y) {
+    // Remove previous wrapper if it exists
+    if (labelWrappers.containsKey(label)) {
+        contentPane.remove(labelWrappers.get(label));
+    } else {
+        // If no wrapper, remove the original label
+        contentPane.remove(label);
+    }
+
+    // Create new wrapper
+    RotatedLabelWrapper wrapper = new RotatedLabelWrapper(label, angle);
+    wrapper.setBounds(x, y, 200, 200); // You can dynamically size this if needed
+
+    // Add to contentPane and store in map
+    contentPane.add(wrapper);
+    labelWrappers.put(label, wrapper);
+
+    // Force UI update
+    contentPane.revalidate();
+    contentPane.repaint();
+
+    return label;
+}
+
+private static class RotatedLabelWrapper extends JComponent {
+    private final JLabel label;
+    private final double angle;
+
+    public RotatedLabelWrapper(JLabel label, double angle) {
+        this.label = label;
+        this.angle = angle;
+        setLayout(null);
+        label.setSize(label.getPreferredSize());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();
+        int centerX = getWidth() / 2;
+        int centerY = getHeight() / 2;
+
+        g2d.translate(centerX, centerY);
+        g2d.rotate(Math.toRadians(angle));
+        g2d.translate(-label.getWidth() / 2, -label.getHeight() / 2);
+
+        label.paint(g2d);
+        g2d.dispose();
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(200, 200); // Adjust if needed
+    }
+}
+private static double getVectorAngle(double x, double y) {
+    if (x == 0 && y == 0) {
+        return 0.0; // Zero vector: arbitrary angle
+    }
+    double angleRadians = Math.atan2(y, x);
+    double angleDegrees = Math.toDegrees(angleRadians);
+    
+    // Normalize to [0, 360)
+    if (angleDegrees < 0) {
+        angleDegrees += 360;
+    }
+    
+    return angleDegrees;
+}
 }

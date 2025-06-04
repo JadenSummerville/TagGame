@@ -1,8 +1,11 @@
 package src.obsticles;
 
 import src.Player;
+import src.builders.CollisionDetector;
+import src.builders.Display;
 
 public interface obsticle
 {
-    public void collide(Player collidingPlayer);
+    void collide(Player collidingPlayer);
+    void inform(Display display, CollisionDetector<obsticle> allObsticles);
 }

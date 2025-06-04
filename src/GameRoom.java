@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import src.builders.CollisionDetector;
 import src.builders.Display;
 import src.builders.Ticker;
+import src.obsticles.Rocko;
+import src.obsticles.obsticle;
 
 public class GameRoom
 {
@@ -39,16 +41,28 @@ public class GameRoom
 
         // Set partciles
         Particle.setDisplay(display, activeParticles, sleepingParticles);
-        for(int i = 0; i != 100; i++)
+        for(int i = 0; i != 200; i++)
         {
             Particle particle = new Particle();
             sleepingParticles.add(particle);
             ticker.addEntity(particle);
         }
+
+        // Set Rockos!!!
+        CollisionDetector<obsticle> allObsticles = new CollisionDetector<>(4000, 2000);
+        int maxNumOfRocks = 10+RANDOM.nextInt(20);
+
+        for(int i = 0; i != maxNumOfRocks; i++)
+        {
+            Rocko rock = new Rocko();
+            rock.inform(display, allObsticles);
+            allObsticles.add(rock, i, i);
+            rock.move(RANDOM.nextInt(1610), RANDOM.nextInt(975));
+        }
         
         // Spawn players
         tagged = display.addImage("./images/tagged.png", 100, 100, 100, 100);
-        Player.setDisplay(display, tagged, collisionDetector);
+        Player.setDisplay(display, tagged, collisionDetector, allObsticles);
         for(int i = 0; i != numOfPlayers; i++)
         {
             String[] data = readAndDeleteFirstLine().split(" ");

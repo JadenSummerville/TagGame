@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Set;
 import src.Particle;
 import src.Player;
+import src.builders.CollisionDetector;
+import src.builders.Display;
+import src.obsticles.obsticle;
 
 public class Swap implements Ability
 {
@@ -17,7 +20,7 @@ public class Swap implements Ability
 
     private boolean boosted = false;
 
-    public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles, Set<Player> players)
+    public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles, Set<Player> players, CollisionDetector<obsticle> obsticles, Display display)
     {
         this.player = player;
         this.activeParticles = activeParticles;
