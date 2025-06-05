@@ -66,7 +66,7 @@ public class Swap implements Ability
             }
             if(player.isTagged())
             {
-                cooldown = 100 + RANDOM.nextInt(200);
+                cooldown = 100 + RANDOM.nextInt(60);
             }
             else
             {

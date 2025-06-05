@@ -75,7 +75,7 @@ public class BoneToss implements Ability
         tossedBones.inform(display, obsticles);
         tossedBones.imune(player);
         obsticles.add(tossedBones, (int)(player.getX() + XCOLLIDEOFFSET), (int)(player.getY() + YCOLLIDEOFFSET));
-        cooldown = 500;//TODO choose an appropriate value. 500?
+        cooldown = 400;//TODO choose an appropriate value. 500?
         fireTime = 150;
         boneAttackImage.setVisible(true);
     }
