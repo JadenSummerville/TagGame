@@ -213,6 +213,10 @@ public class Player extends Ticker.Entity
         untaggedImage.setVisible(true);
         timeAsIt = 0;
         tagInvinsibility = 4;
+        for(Ability ability: abilities.values())
+        {
+            ability.tag();
+        }
     }
     public boolean isTagged()
     {

@@ -11,4 +11,5 @@ public interface Ability {
     public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles, Set<Player> players, CollisionDetector<obsticle> obsticles, Display display);
     public void activate();
     public void idol();
+    public void tag();
 }

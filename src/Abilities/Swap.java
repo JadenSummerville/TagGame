@@ -1,6 +1,7 @@
 package src.Abilities;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 import src.Particle;
 import src.Player;
@@ -10,11 +11,10 @@ import src.obsticles.obsticle;
 
 public class Swap implements Ability
 {
-    public Player player;
+    private Player player;
+    private final static Random RANDOM = new Random();
     private double cooldown;
-    private double activationTimer;
     private Set<Particle> sleepingParticles;
-    private Set<Particle> activeParticles;
     private Set<Player> players;
     private final static int NUM_OF_PARTILES = 10;
 
@@ -23,7 +23,6 @@ public class Swap implements Ability
     public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles, Set<Player> players, CollisionDetector<obsticle> obsticles, Display display)
     {
         this.player = player;
-        this.activeParticles = activeParticles;
         this.sleepingParticles = sleepingParticles;
         this.players = players;
     }
@@ -31,7 +30,7 @@ public class Swap implements Ability
     {
         if(cooldown == 0)
         {
-            Player closestPlayer = null;
+            Player closestPlayer = player;
             double closest = Double.MAX_VALUE;
             for(Player currentPlayer: players)
             {
@@ -67,7 +66,7 @@ public class Swap implements Ability
                     nextParticle.spawn((int) closestPlayer.getX(), (int) closestPlayer.getY());
                 }
             }
-            cooldown = 130;
+            cooldown = 100 + 500*RANDOM.nextInt();
         }
     }
     public void idol()
@@ -76,5 +75,9 @@ public class Swap implements Ability
         {
             cooldown--;
         }
+    }
+    public void tag()
+    {
+        cooldown = 0;
     }
 }

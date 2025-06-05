@@ -69,4 +69,8 @@ public class WesternDraw implements Ability
             cooldown--;
         }
     }
+    public void tag()
+    {
+        cooldown = 0;
+    }
 }

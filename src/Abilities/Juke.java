@@ -12,7 +12,7 @@ import src.obsticles.obsticle;
 public class Juke implements Ability
 {
     public Player player;
-    private double cooldown;
+    private int cooldown;
     private Set<Particle> sleepingParticles;
     private Set<Particle> activeParticles;
 
@@ -40,5 +40,9 @@ public class Juke implements Ability
             return;
         }
         cooldown--;
+    }
+    public void tag()
+    {
+        cooldown = 0;
     }
 }

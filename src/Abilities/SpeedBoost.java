@@ -47,4 +47,8 @@ public class SpeedBoost implements Ability
         }
         cooldown--;
     }
+    public void tag()
+    {
+        cooldown = 0;
+    }
 }
