@@ -18,8 +18,6 @@ public class Swap implements Ability
     private Set<Player> players;
     private final static int NUM_OF_PARTILES = 10;
 
-    private boolean boosted = false;
-
     public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles, Set<Player> players, CollisionDetector<obsticle> obsticles, Display display)
     {
         this.player = player;
