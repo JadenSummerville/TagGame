@@ -123,4 +123,8 @@ public class BoneToss implements Ability
     {
         cooldown = fireTime+1;
     }
+    public void tagged()
+    {
+        cooldown = 500;
+    }
 }

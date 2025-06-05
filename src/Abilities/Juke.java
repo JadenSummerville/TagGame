@@ -30,7 +30,14 @@ public class Juke implements Ability
             speedBoostAffect.inform(player, sleepingParticles, activeParticles);
             speedBoostAffect.setBoost(5, 0, 30);
             player.addAffect(speedBoostAffect);
-            cooldown = 1000;
+            if(player.isTagged())
+            {
+                cooldown = 1000;
+            }
+            else
+            {
+                cooldown = 1200;
+            }
         }
     }
     public void idol()
@@ -44,5 +51,12 @@ public class Juke implements Ability
     public void tag()
     {
         cooldown = 0;
+    }
+    public void tagged()
+    {
+        if(cooldown > 500)
+        {
+            cooldown = 500;
+        }
     }
 }

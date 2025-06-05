@@ -64,7 +64,14 @@ public class Swap implements Ability
                     nextParticle.spawn((int) closestPlayer.getX(), (int) closestPlayer.getY());
                 }
             }
-            cooldown = 100 + 500*RANDOM.nextInt();
+            if(player.isTagged())
+            {
+                cooldown = 100 + RANDOM.nextInt(200);
+            }
+            else
+            {
+                cooldown = 100 + RANDOM.nextInt(500);
+            }
         }
     }
     public void idol()
@@ -77,5 +84,12 @@ public class Swap implements Ability
     public void tag()
     {
         cooldown = 0;
+    }
+    public void tagged()
+    {
+        if(cooldown > 500)
+        {
+            cooldown = 500;
+        }
     }
 }

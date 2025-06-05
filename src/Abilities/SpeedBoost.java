@@ -29,11 +29,11 @@ public class SpeedBoost implements Ability
             speedBoostAffect.inform(player, sleepingParticles, activeParticles);
             if(player.isTagged())
             {
-                speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 600);
+                speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 550);
             }
             else
             {
-                speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 300);
+                speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 350);
             }
             player.addAffect(speedBoostAffect);
             cooldown = 1250;
@@ -47,8 +47,11 @@ public class SpeedBoost implements Ability
         }
         cooldown--;
     }
-    public void tag()
+    public void tagged()
     {
-        cooldown = 0;
+        if(cooldown > 500)
+        {
+            cooldown = 500;
+        }
     }
 }

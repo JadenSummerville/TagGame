@@ -73,4 +73,11 @@ public class WesternDraw implements Ability
     {
         cooldown = 0;
     }
+    public void tagged()
+    {
+        if(cooldown > 500)
+        {
+            cooldown = 500;
+        }
+    }
 }

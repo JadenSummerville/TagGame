@@ -12,4 +12,5 @@ public interface Ability {
     public void activate();
     public void idol();
     public void tag();
+    public void tagged();
 }

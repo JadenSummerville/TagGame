@@ -206,6 +206,10 @@ public class Player extends Ticker.Entity
         untaggedImage.setLocation((int)x, (int)y);
         untaggedImage.setVisible(false);
         timeAsIt = -0.1;
+        for(Ability ability: abilities.values())
+        {
+            ability.tagged();
+        }
     }
     public void untag()
     {
