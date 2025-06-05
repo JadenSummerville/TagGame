@@ -60,7 +60,7 @@ public class WesternDraw implements Ability
                 }
             }
         }
-        cooldown = 250;
+        cooldown = 210;
     }
     public void idol()
     {
