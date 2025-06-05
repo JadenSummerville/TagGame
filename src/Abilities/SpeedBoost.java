@@ -36,7 +36,7 @@ public class SpeedBoost implements Ability
                 speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 350);
             }
             player.addAffect(speedBoostAffect);
-            cooldown = 1250;
+            cooldown = 2050;
         }
     }
     public void idol()
@@ -46,6 +46,10 @@ public class SpeedBoost implements Ability
             return;
         }
         cooldown--;
+    }
+    public void tag()
+    {
+        cooldown = 0;
     }
     public void tagged()
     {
