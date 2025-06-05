@@ -67,7 +67,7 @@ public class Swap implements Ability
                     nextParticle.spawn((int) closestPlayer.getX(), (int) closestPlayer.getY());
                 }
             }
-            cooldown = 100;
+            cooldown = 130;
         }
     }
     public void idol()

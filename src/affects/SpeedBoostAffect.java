@@ -2,7 +2,6 @@ package src.affects;
 
 import java.util.ArrayList;
 import java.util.Set;
-
 import src.Particle;
 import src.Player;
 
@@ -10,17 +9,18 @@ public class SpeedBoostAffect implements Affect
 {
     private Player player;
     private Set<Particle> sleepingParticles;
-    private Set<Particle> activeParticles;
 
     private static final int ID = 0;
 
-    private int affectLength = 600;
+    private double speedBoost;
+    private double turnRate;
+
+    private int affectLength;
 
     public void inform(Player player, Set<Particle> sleepingParticles, Set<Particle> activeParticles)
     {
         this.player = player;
         this.sleepingParticles = sleepingParticles;
-        this.activeParticles = activeParticles;
     };
     public boolean isDepleted()
     {
@@ -30,12 +30,8 @@ public class SpeedBoostAffect implements Affect
     public void update()
     {
         affectLength--;
-        if(!player.isTagged() && affectLength != 0)
-        {
-            affectLength--;
-        }
-        player.speed *= 2;
-        player.friction = player.friction/10+0.9; // 1 - (1 - player.friction) / 2
+        player.speed *= this.speedBoost;
+        player.friction = this.turnRate; // 1 - (1 - player.friction) / 2
         if (sleepingParticles.size() != 0)
         {
             Particle nextParticle = new ArrayList<>(sleepingParticles).get(0);
@@ -43,6 +39,12 @@ public class SpeedBoostAffect implements Affect
         }
     };
     public void delete(){};
+    public void setBoost(double speedBoost, double turnRate, int affectLength)
+    {
+        this.speedBoost = speedBoost;
+        this.turnRate = turnRate;
+        this.affectLength = affectLength;
+    }
 
     @Override
     public boolean equals(Object obj) {

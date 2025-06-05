@@ -1,10 +1,8 @@
 package src.Abilities;
 
-import java.awt.DisplayMode;
 import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.JLabel;
-
 import src.Particle;
 import src.Player;
 import src.builders.CollisionDetector;
@@ -77,7 +75,7 @@ public class BoneToss implements Ability
         tossedBones.inform(display, obsticles);
         tossedBones.imune(player);
         obsticles.add(tossedBones, (int)(player.getX() + XCOLLIDEOFFSET), (int)(player.getY() + YCOLLIDEOFFSET));
-        cooldown = 300;//TODO choose an appropriate value. 500?
+        cooldown = 500;//TODO choose an appropriate value. 500?
         fireTime = 150;
         boneAttackImage.setVisible(true);
     }

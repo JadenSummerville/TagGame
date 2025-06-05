@@ -7,10 +7,12 @@ import java.util.Set;
 import javax.swing.JLabel;
 import src.Abilities.Ability;
 import src.Abilities.BoneToss;
+import src.Abilities.Juke;
 import src.Abilities.SpeedBoost;
 import src.Abilities.Swap;
 import src.Abilities.WesternDraw;
 import src.affects.Affect;
+import src.affects.Stun;
 import src.builders.CollisionDetector;
 import src.builders.Display;
 import src.builders.Ticker;
@@ -55,6 +57,7 @@ public class Player extends Ticker.Entity
     private double timeAsIt = 0;
     private double tagInvinsibility = 4;
     private int reasonsToBeInvisible = 0;
+    private int reasonsToBeStunImmune = 0;
 
     public Player(int x, int y, int up, int right, int down, int left, JLabel untaggedImage)
     {
@@ -111,12 +114,12 @@ public class Player extends Ticker.Entity
             affect.update();
             if(affect.isDepleted())
             {
-                affect.delete();
                 toBeDeleted.add(affect);
             }
         }
         for(Affect delete: toBeDeleted)
         {
+            delete.delete();
             affects.remove(delete);
         }
         // initiate adjusted speed and friction
@@ -176,7 +179,7 @@ public class Player extends Ticker.Entity
         if(tagged)
         {
             taggedImage.setLocation((int)x, (int)y);
-            timeAsIt += 0.00004;
+            timeAsIt += 0.000042;
             for(Player tagged: collidedPlayers)
             {
                 if (tagged.canBeTaggged())
@@ -282,6 +285,9 @@ public class Player extends Ticker.Entity
             case 3:
                 ability = new WesternDraw();
                 break;
+            case 4:
+                ability = new Juke();
+                break;
             default:
                 throw new RuntimeException("Unidentified ability");
         }
@@ -290,12 +296,24 @@ public class Player extends Ticker.Entity
     }
     public void addAffect(Affect affect)
     {
-        if(affects.contains(affect))
+        if(affects.contains(affect) || (affect instanceof Stun && reasonsToBeStunImmune != 0))
         {
             return;
         }
         affect.create();
         affects.add(affect);
+    }
+    public Set<Affect> getAffects()
+    {
+        return this.affects;
+    }
+    public void addReasonToBeStunImmune()
+    {
+        this.reasonsToBeStunImmune++;
+    }
+    public void removeReasonToBeStunImmune()
+    {
+        this.reasonsToBeStunImmune--;
     }
     @Override
     public boolean equals(Object obj)
@@ -312,5 +330,4 @@ public class Player extends Ticker.Entity
     public int hashCode() {
         return this.id;
     }
-    
 }

@@ -1,6 +1,7 @@
 package src.Abilities;
 
 import java.util.Set;
+
 import src.Particle;
 import src.Player;
 import src.affects.SpeedBoostAffect;
@@ -8,7 +9,7 @@ import src.builders.CollisionDetector;
 import src.builders.Display;
 import src.obsticles.obsticle;
 
-public class SpeedBoost implements Ability
+public class Juke implements Ability
 {
     public Player player;
     private double cooldown;
@@ -27,16 +28,9 @@ public class SpeedBoost implements Ability
         {
             SpeedBoostAffect speedBoostAffect = new SpeedBoostAffect();
             speedBoostAffect.inform(player, sleepingParticles, activeParticles);
-            if(player.isTagged())
-            {
-                speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 600);
-            }
-            else
-            {
-                speedBoostAffect.setBoost(4.5, player.friction/10+0.9, 300);
-            }
+            speedBoostAffect.setBoost(5, 0, 30);
             player.addAffect(speedBoostAffect);
-            cooldown = 1250;
+            cooldown = 1000;
         }
     }
     public void idol()

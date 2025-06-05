@@ -32,7 +32,7 @@ public class WesternDraw implements Ability
         }
         if(RANDOM.nextBoolean())
         {
-            Stun.stun(player, 150);
+            Stun.stun(player, 150, true);
             for(int i = 0; i != 5; i++)
             {
                 if (sleepingParticles.size() != 0)
@@ -48,7 +48,7 @@ public class WesternDraw implements Ability
             {
                 if(p != player)
                 {
-                    Stun.stun(p, 250);
+                    Stun.stun(p, 250, false);
                     for(int i = 0; i != 20; i++)
                     {
                         if (sleepingParticles.size() != 0)
@@ -60,7 +60,7 @@ public class WesternDraw implements Ability
                 }
             }
         }
-        cooldown = 111;
+        cooldown = 250;
     }
     public void idol()
     {

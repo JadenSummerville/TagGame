@@ -2,7 +2,6 @@ package src.obsticles;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import src.Player;
 import src.affects.Stun;
 import src.builders.CollisionDetector;
@@ -21,7 +20,7 @@ public class TossedBones implements obsticle {
         {
             return;
         }
-        Stun.stun(collidingPlayer, 200);
+        Stun.stun(collidingPlayer, 220, false);
     }
     public void inform(Display display, CollisionDetector<obsticle> allObsticles)
     {
