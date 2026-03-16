@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.swing.JLabel;
 import src.Abilities.Ability;
 import src.Abilities.BoneToss;
+import src.Abilities.DarkBallSpell;
 import src.Abilities.Juke;
 import src.Abilities.SpeedBoost;
 import src.Abilities.Swap;
@@ -56,8 +57,9 @@ public class Player extends Ticker.Entity
 
     private double timeAsIt = 0;
     private double tagInvinsibility = 4;
-    private int reasonsToBeInvisible = 0;
     private int reasonsToBeStunImmune = 0;
+
+    private int dispell = 0;
 
     public Player(int x, int y, int up, int right, int down, int left, JLabel untaggedImage)
     {
@@ -98,13 +100,24 @@ public class Player extends Ticker.Entity
         friction = FRICTION;
 
         // Update abilities
-        for(Integer ability: abilities.keySet())
+        if(dispell == 0)
         {
-            if (display.keyBoard.isPressed(ability))
+            for(Integer ability: abilities.keySet())
             {
-                abilities.get(ability).activate();
-            }
+                if (display.keyBoard.isPressed(ability))
+                {
+                    abilities.get(ability).activate();
+                }
             abilities.get(ability).idol();
+            }
+        }
+        else
+        {
+            for(Integer ability: abilities.keySet())
+            {
+                abilities.get(ability).idol();
+            }
+            dispell--;
         }
 
         // Update affects
@@ -112,7 +125,7 @@ public class Player extends Ticker.Entity
         for(Affect affect: affects)
         {
             affect.update();
-            if(affect.isDepleted())
+            if(affect.isDepleted() || dispell != 0)
             {
                 toBeDeleted.add(affect);
             }
@@ -296,6 +309,9 @@ public class Player extends Ticker.Entity
             case 4:
                 ability = new Juke();
                 break;
+            case 5:
+                ability = new DarkBallSpell();
+                break;
             default:
                 throw new RuntimeException("Unidentified ability");
         }
@@ -322,6 +338,18 @@ public class Player extends Ticker.Entity
     public void removeReasonToBeStunImmune()
     {
         this.reasonsToBeStunImmune--;
+    }
+    public void dispell(int i)
+    {
+        if(i < 0)
+        {
+            throw new IllegalArgumentException("cannot add negative spell timer");
+        }
+        dispell = i;
+    }
+    public boolean isDispelled()
+    {
+        return dispell != 0;
     }
     @Override
     public boolean equals(Object obj)

@@ -82,7 +82,9 @@ public class GameRoom
         {
             ticker.addEntity(player);
         }
-        players.get(RANDOM.nextInt(players.size())).tag();
+        int temp = RANDOM.nextInt(players.size());
+        System.out.println(temp);
+        players.get(temp).tag();
 
         // Set each particle to back
         //for(Particle particle: sleepingParticles)
@@ -100,7 +102,7 @@ public class GameRoom
         try
         {
         BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
-        String firstLine = reader.readLine(); // ✅ This reads the first line
+        String firstLine = reader.readLine(); // This reads the first line
 
         // Read the remaining lines
         List<String> remainingLines = new ArrayList<>();
